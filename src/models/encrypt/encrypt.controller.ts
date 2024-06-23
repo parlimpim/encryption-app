@@ -2,6 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { EncryptService } from './encrypt.service';
 import { EncryptDataDto } from './dto/encrypt-data.dto';
+import { DecryptDataDto } from './dto/decrypt-data.dto';
 
 @ApiTags('Encrypt')
 @Controller('')
@@ -17,5 +18,13 @@ export class EncryptController {
   })
   encrypt(@Body() encryptDataDto: EncryptDataDto) {
     return this.encryptService.encryptData(encryptDataDto.payload);
+  }
+
+  @Post('get-decrypt-data')
+  decrypt(@Body() decryptDataDto: DecryptDataDto) {
+    return this.encryptService.decryptData(
+      decryptDataDto.data1,
+      decryptDataDto.data2,
+    );
   }
 }

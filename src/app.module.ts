@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { EncryptModule } from './components/encrypt/encrypt.module';
+import { EncryptModule } from './models/encrypt/encrypt.module';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true }), EncryptModule],
