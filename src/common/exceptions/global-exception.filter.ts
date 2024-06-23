@@ -12,14 +12,15 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
-    const status =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
-    const errorCode =
-      exception instanceof HttpException
-        ? this.getErrorCode(exception.getResponse())
-        : ErrorCode.INTERNAL_SERVER_ERROR;
+    let status: number;
+    let errorCode: string;
+    if (exception instanceof HttpException) {
+      status = exception.getStatus();
+      errorCode = this.getErrorCode(exception.getResponse());
+    } else {
+      status = HttpStatus.INTERNAL_SERVER_ERROR;
+      errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
+    }
 
     response.status(status).json({
       successful: false,
