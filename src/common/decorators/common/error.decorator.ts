@@ -26,6 +26,7 @@ export const ApiErrorResponse = ({
         example: {
           successful: false,
           error_code: errorCode,
+          data: null,
         },
         type: getSchemaPath(ResponseDto),
       },

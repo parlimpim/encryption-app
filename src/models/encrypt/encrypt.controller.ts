@@ -44,7 +44,7 @@ export class EncryptController {
   @HttpCode(200)
   @ApiCommonResponse({
     status: HttpStatus.OK,
-    model: EncryptController,
+    model: EncryptDataDto,
     description: 'Success',
   })
   @ApiErrorResponse({

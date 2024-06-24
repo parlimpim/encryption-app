@@ -34,8 +34,8 @@ export class EncryptService {
     const encryptedKeyString = encryptedKey.toString('base64');
 
     // encrypt payload
-    const cipher = createCipheriv(process.env.ALGORITHM, key, iv);
-    let encryptedPayload = cipher.update(payload, 'utf8', 'base64');
+    const cipher = createCipheriv('aes-256-ctr', key, iv);
+    let encryptedPayload = cipher.update(payload, 'utf-8', 'base64');
     encryptedPayload += cipher.final('base64');
 
     const response: DecryptDataDto = {
@@ -60,9 +60,9 @@ export class EncryptService {
     );
 
     // decrypt payload
-    const decipher = createDecipheriv(process.env.ALGORITHM, decryptKey, iv);
-    let decryptedPayload = decipher.update(encryptedPayload, 'base64', 'utf8');
-    decryptedPayload += decipher.final('utf8');
+    const decipher = createDecipheriv('aes-256-ctr', decryptKey, iv);
+    let decryptedPayload = decipher.update(encryptedPayload, 'base64', 'utf-8');
+    decryptedPayload += decipher.final('utf-8');
 
     const response: EncryptDataDto = { payload: decryptedPayload };
     return response;
