@@ -7,6 +7,7 @@ import {
   createDecipheriv,
   publicDecrypt,
   constants,
+  createHash,
 } from 'crypto';
 import { promisify } from 'util';
 import { DecryptDataDto } from './dto/decrypt-data.dto';
@@ -18,10 +19,14 @@ export class EncryptService {
 
   async encryptData(encryptDataDto: EncryptDataDto) {
     const { payload } = encryptDataDto;
-    const salt = randomBytes(16);
-    const iv = Buffer.from(process.env.CRYPTO_IV, 'base64');
+    const iv = process.env.CRYPTO_IV;
     const password = process.env.CRYPTO_PASSWORD;
+    const salt = randomBytes(16);
     const key = (await promisify(scrypt)(password, salt, 32)) as Buffer;
+    const encryptionIV = createHash('sha512')
+      .update(iv)
+      .digest('base64')
+      .substring(0, 16);
 
     // encrypt key
     const encryptedKey = privateEncrypt(
@@ -34,7 +39,7 @@ export class EncryptService {
     const encryptedKeyString = encryptedKey.toString('base64');
 
     // encrypt payload
-    const cipher = createCipheriv('aes-256-ctr', key, iv);
+    const cipher = createCipheriv('aes-256-ctr', key, encryptionIV);
     let encryptedPayload = cipher.update(payload, 'utf-8', 'base64');
     encryptedPayload += cipher.final('base64');
 
@@ -48,7 +53,11 @@ export class EncryptService {
   async decryptData(decryptDataDto: DecryptDataDto) {
     const { data1: encryptedKeyString, data2: encryptedPayload } =
       decryptDataDto;
-    const iv = Buffer.from(process.env.CRYPTO_IV, 'base64');
+    const iv = process.env.CRYPTO_IV;
+    const encryptionIV = createHash('sha512')
+      .update(iv)
+      .digest('base64')
+      .substring(0, 16);
 
     // decrypt key
     const decryptKey = publicDecrypt(
@@ -60,7 +69,7 @@ export class EncryptService {
     );
 
     // decrypt payload
-    const decipher = createDecipheriv('aes-256-ctr', decryptKey, iv);
+    const decipher = createDecipheriv('aes-256-ctr', decryptKey, encryptionIV);
     let decryptedPayload = decipher.update(encryptedPayload, 'base64', 'utf-8');
     decryptedPayload += decipher.final('utf-8');
 
