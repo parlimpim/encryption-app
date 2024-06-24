@@ -36,8 +36,8 @@ export class EncryptController {
     type: EncryptDataDto,
     description: 'Json structure for encrypt data',
   })
-  encrypt(@Body() encryptDataDto: EncryptDataDto) {
-    return this.encryptService.encryptData(encryptDataDto.payload);
+  async encrypt(@Body() encryptDataDto: EncryptDataDto) {
+    return await this.encryptService.encryptData(encryptDataDto);
   }
 
   @Post('get-decrypt-data')
@@ -61,10 +61,7 @@ export class EncryptController {
     type: DecryptDataDto,
     description: 'Json structure for decrypt data',
   })
-  decrypt(@Body() decryptDataDto: DecryptDataDto) {
-    return this.encryptService.decryptData(
-      decryptDataDto.data1,
-      decryptDataDto.data2,
-    );
+  async decrypt(@Body() decryptDataDto: DecryptDataDto) {
+    return await this.encryptService.decryptData(decryptDataDto);
   }
 }

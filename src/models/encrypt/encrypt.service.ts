@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import {
   createCipheriv,
   randomBytes,
@@ -10,12 +9,15 @@ import {
   constants,
 } from 'crypto';
 import { promisify } from 'util';
+import { DecryptDataDto } from './dto/decrypt-data.dto';
+import { EncryptDataDto } from './dto/encrypt-data.dto';
 
 @Injectable()
 export class EncryptService {
-  constructor(private configService: ConfigService) {}
+  constructor() {}
 
-  async encryptData(payload: string) {
+  async encryptData(encryptDataDto: EncryptDataDto) {
+    const { payload } = encryptDataDto;
     const salt = randomBytes(16);
     const iv = Buffer.from(process.env.CRYPTO_IV, 'base64');
     const password = process.env.CRYPTO_PASSWORD;
@@ -36,10 +38,16 @@ export class EncryptService {
     let encryptedPayload = cipher.update(payload, 'utf8', 'base64');
     encryptedPayload += cipher.final('base64');
 
-    return { data1: encryptedKeyString, data2: encryptedPayload };
+    const response: DecryptDataDto = {
+      data1: encryptedKeyString,
+      data2: encryptedPayload,
+    };
+    return response;
   }
 
-  async decryptData(encryptedKeyString: string, encryptedPayload: string) {
+  async decryptData(decryptDataDto: DecryptDataDto) {
+    const { data1: encryptedKeyString, data2: encryptedPayload } =
+      decryptDataDto;
     const iv = Buffer.from(process.env.CRYPTO_IV, 'base64');
 
     // decrypt key
@@ -55,6 +63,8 @@ export class EncryptService {
     const decipher = createDecipheriv(process.env.ALGORITHM, decryptKey, iv);
     let decryptedPayload = decipher.update(encryptedPayload, 'base64', 'utf8');
     decryptedPayload += decipher.final('utf8');
-    return { payload: decryptedPayload };
+
+    const response: EncryptDataDto = { payload: decryptedPayload };
+    return response;
   }
 }
