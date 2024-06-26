@@ -22,51 +22,53 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+# NestJS Encryption App
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+The encryption application that encrypt and decrypt data
 
-## Installation
+## Getting started
 
-```bash
-$ npm install
+### Installation
+
+Clone the repository
+
+```
+git clone https://github.com/parlimpim/encryption-app.git
 ```
 
-## Running the app
+Install all the dependencies
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+```
+cd encryption-app
+npm install
 ```
 
-## Test
+After the dependencies are installed, configure the project by creating a new .env file containing the environment variables.
+
+```
+cp .env.example .env
+```
+
+### Running the app
+```bash
+# start application
+npm run start
+
+# start application in watch mode
+npm run start:dev
+```
+
+See API swagger docs by browsing to [http://localhost:3000/api-docs](http://localhost:3000/api-docs)
+
+### Test
 
 ```bash
 # unit tests
 $ npm run test
 
-# e2e tests
-$ npm run test:e2e
-
 # test coverage
 $ npm run test:cov
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
 
